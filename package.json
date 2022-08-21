@@ -4,6 +4,7 @@
   "description": "Backend to the News Explorer App, final project of Practicum",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js ",
     "dev": "nodemon app.js",
     "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
