@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Required field'],
       validate: {
         validator: (v) => emailRegex.test(v),
-        message: 'This is not a valid URL',
+        message: 'This is not a valid email',
       },
     },
 

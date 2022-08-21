@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { linkRegex } = require('../utils/regex');
 
 const newsCardScheme = new mongoose.Schema(
   {
@@ -25,11 +26,19 @@ const newsCardScheme = new mongoose.Schema(
     link: {
       type: String,
       required: true,
+      validate: {
+        validator: (v) => linkRegex.test(v),
+        message: 'This is not a valid URL',
+      },
     },
 
     image: {
       type: String,
       required: true,
+      validate: {
+        validator: (v) => linkRegex.test(v),
+        message: 'This is not a valid URL',
+      },
     },
 
     owner: {
