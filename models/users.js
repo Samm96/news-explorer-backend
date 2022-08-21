@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { emailRegex } = require('../utils/regex');
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,6 +16,10 @@ const userSchema = new mongoose.Schema(
       minLength: [2, 'The EMAIL field length is too short'],
       maxLength: [30, 'The EMAIL field length is too long'],
       required: [true, 'Required field'],
+      validate: {
+        validator: (v) => emailRegex.test(v),
+        message: 'This is not a valid URL',
+      },
     },
 
     password: {
