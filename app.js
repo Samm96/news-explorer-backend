@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const helmet = require('helmet');
+const routes = require('./routes');
 const mongoose = require('mongoose');
 
 const { PORT = 3000 } = process.env;
@@ -14,6 +15,8 @@ mongoose.connect('mongodb://localhost:27017/news-explorer');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(routes);
 
 app.use((err, req, res, next) => {
   console.log(err);

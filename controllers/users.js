@@ -1,7 +1,5 @@
 const User = require('../models/users');
-const AuthorizationError = require('../errors/AuthorizationError');
 const NotFoundError = require('../errors/NotFoundError');
-const InternalServerError = require('../errors/InternalError');
 const CastError = require('../errors/CastError');
 
 const getUser = (req, res, next) => {
@@ -26,6 +24,11 @@ const getUser = (req, res, next) => {
     });
 };
 
+const getCurrentUser = (req, res, next) => {
+  getUser(req, res, next);
+};
+
 module.exports = {
   getUser,
+  getCurrentUser,
 };

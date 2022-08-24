@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const { linkRegex } = require('../utils/regex');
-const validateURL = require('../utils/urlValidate');
 
 const {
   getSavedArticles,
@@ -8,10 +6,10 @@ const {
   deleteArticle,
 } = require('../controllers/newsCards');
 
-router.get('/saved-news', getSavedArticles);
+router.get('/', getSavedArticles);
 
-router.post('/saved-news', saveArticle);
+router.post('/', saveArticle);
 
-router.delete('/saved-news/:articleId', deleteArticle);
+router.delete('/:articleId', deleteArticle);
 
 module.exports = router;

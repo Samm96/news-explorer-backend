@@ -15,9 +15,11 @@ const getSavedArticles = (req, res, next) => {
 };
 
 const saveArticle = (req, res, next) => {
-  console.log(req.user._id);
+  // console.log(req.user._id);
 
-  const owner = req.user._id;
+  const owner = req.user;
+
+  console.log(owner);
   const {
     keyword, title, description, publishedAt, source, urlToImage,
   } = req.body;
