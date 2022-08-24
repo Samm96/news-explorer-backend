@@ -15,6 +15,11 @@ mongoose.connect('mongodb://localhost:27017/news-explorer');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(err.statusCode).send({ message: err.message });
+});
+
 app.listen(PORT, () => {
   console.log('Listening at PORT 3000');
 });
