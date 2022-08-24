@@ -11,28 +11,19 @@ const newsCardScheme = new mongoose.Schema(
       type: String,
     },
 
-    text: {
+    description: {
       type: String,
     },
 
-    date: {
+    publishedAt: {
       type: String,
     },
 
     source: {
-      type: String,
+      type: Object,
     },
 
-    link: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (v) => linkRegex.test(v),
-        message: 'This is not a valid URL',
-      },
-    },
-
-    image: {
+    urlToImage: {
       type: String,
       required: true,
       validate: {
