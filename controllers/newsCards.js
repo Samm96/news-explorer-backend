@@ -60,3 +60,9 @@ const deleteArticle = (req, res, next) => {
     })
     .catch(next);
 };
+
+module.exports = {
+  getSavedArticles,
+  saveArticle,
+  deleteArticle,
+};
