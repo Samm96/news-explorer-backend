@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { linkRegex } = require('../utils/regex');
 
-const newsCardScheme = new mongoose.Schema(
+const newsCardSchema = new mongoose.Schema(
   {
     keyword: {
       type: String,
@@ -36,10 +36,10 @@ const newsCardScheme = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
       required: true,
-      select: false,
+      // select: false,
     },
   },
-  { versionKey: false },
+  // { versionKey: false },
 );
 
-module.exports = mongoose.model('newsCard', newsCardScheme);
+module.exports = mongoose.model('newsCard', newsCardSchema);
