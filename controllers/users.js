@@ -1,6 +1,10 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/users');
 const NotFoundError = require('../errors/NotFoundError');
 const CastError = require('../errors/CastError');
+const BadRequestError = require('../errors/BadRequestError');
+const ConflictError = require('../errors/ConflictError');
+const { SUCCESS_MSG } = require('../utils/utils');
 
 const getUser = (req, res, next) => {
   const id = req.params.id !== 'me' ? req.params.id : req.user._id;
@@ -28,7 +32,30 @@ const getCurrentUser = (req, res, next) => {
   getUser(req, res, next);
 };
 
+const createUser = (req, res, next) => {
+  const { username, email, password } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new ConflictError('Email already in use');
+      } else {
+        return bcrypt.hash(password, 10);
+      }
+    })
+    .then((hash) => User.create({ username, email, password: hash }))
+    .then((user) => res.status(SUCCESS_MSG).send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Missing or invalid email or password'));
+      } else {
+        next(err);
+      }
+    });
+};
+
 module.exports = {
   getUser,
   getCurrentUser,
+  createUser,
 };
