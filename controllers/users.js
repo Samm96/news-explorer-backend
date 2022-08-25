@@ -1,4 +1,8 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const { JWT_SECRET } = process.env;
+
 const User = require('../models/users');
 const NotFoundError = require('../errors/NotFoundError');
 const CastError = require('../errors/CastError');
@@ -54,8 +58,37 @@ const createUser = (req, res, next) => {
     });
 };
 
+const userLogin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Incorrect email or password'));
+      }
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error('Incorrect email or password'));
+        }
+        return user;
+      });
+    })
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: '7d',
+      });
+
+      res.send({ data: user.toJSON(), token });
+    })
+    .catch(() => {
+      next(new BadRequestError('Incorrect email or password'));
+    });
+};
+
 module.exports = {
   getUser,
   getCurrentUser,
   createUser,
+  userLogin,
 };
