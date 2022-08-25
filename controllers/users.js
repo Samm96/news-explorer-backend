@@ -79,7 +79,10 @@ const userLogin = (req, res, next) => {
         expiresIn: '7d',
       });
 
-      res.send({ data: user.toJSON(), token });
+      const userInfo = user.toJSON();
+      delete userInfo[password];
+
+      res.send({ data: userInfo, token });
     })
     .catch(() => {
       next(new BadRequestError('Incorrect email or password'));
