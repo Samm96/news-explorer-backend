@@ -15,10 +15,9 @@ const getSavedArticles = (req, res, next) => {
 };
 
 const saveArticle = (req, res, next) => {
-  // come back to this when auth is created
-  console.log(req.user);
+  console.log(req.user._id);
 
-  const owner = req.user;
+  const owner = req.user._id;
 
   const {
     keyword, title, description, publishedAt, source, urlToImage,
@@ -33,15 +32,26 @@ const saveArticle = (req, res, next) => {
     urlToImage,
     owner,
   })
-    .then((article) => res.send({ data: article }))
-    .catch(() => {
+    .then((article) => {
       if (!owner) {
-        console.log(owner);
         next(
           new AuthorizationError(
             'You need to sign up or sign in to save articles',
           ),
         );
+      }
+
+      return article;
+    })
+    .then((article) => {
+      const articleInfo = article.toJSON();
+      delete articleInfo.owner;
+
+      res.status(SUCCESS_MSG).send({ data: articleInfo });
+    })
+    .catch((err) => {
+      if (err.status === 404) {
+        next(new NotFoundError('Article not found'));
       } else {
         next(new InternalServerError('An error has occurred with the server'));
       }
@@ -49,16 +59,15 @@ const saveArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-  const articleId = req.params;
-
+  const { articleId } = req.params;
   NewsCard.findById(articleId)
     .orFail(new NotFoundError('Article ID not found'))
-    .then((card) => {
+    .then(() => {
       NewsCard.findOneAndDelete(articleId)
         .orFail(new NotFoundError('Article ID not found'))
         .then(() => res
           .status(SUCCESS_MSG)
-          .send(card && { message: 'Article deleted successfully' }))
+          .send({ message: 'Article deleted successfully' }))
         .catch(next);
     })
     .catch(next);

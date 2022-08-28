@@ -13,7 +13,7 @@ router.post('/signin', userLogin);
 
 router.use(auth);
 
-router.use('/saved-news', articlesRouter);
+router.use('/articles', articlesRouter);
 router.use('/users', usersRouter);
 
 router.use('*', (req, res, next) => {
