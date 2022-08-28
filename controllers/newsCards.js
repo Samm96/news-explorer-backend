@@ -15,11 +15,11 @@ const getSavedArticles = (req, res, next) => {
 };
 
 const saveArticle = (req, res, next) => {
-  // console.log(req.user._id);
+  // come back to this when auth is created
+  console.log(req.user);
 
   const owner = req.user;
 
-  console.log(owner);
   const {
     keyword, title, description, publishedAt, source, urlToImage,
   } = req.body;
@@ -36,6 +36,7 @@ const saveArticle = (req, res, next) => {
     .then((article) => res.send({ data: article }))
     .catch(() => {
       if (!owner) {
+        console.log(owner);
         next(
           new AuthorizationError(
             'You need to sign up or sign in to save articles',

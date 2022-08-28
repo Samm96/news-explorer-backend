@@ -3,7 +3,7 @@ const { emailRegex } = require('../utils/regex');
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       default: 'Elise',
       minLength: [2, 'The NAME field length is too short'],
