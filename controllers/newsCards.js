@@ -15,7 +15,6 @@ const getSavedArticles = (req, res, next) => {
 };
 
 const saveArticle = (req, res, next) => {
-  // come back to this when auth is created
   console.log(req.user._id);
 
   const owner = req.user._id;
@@ -35,7 +34,6 @@ const saveArticle = (req, res, next) => {
   })
     .then((article) => {
       if (!owner) {
-        console.log(owner);
         next(
           new AuthorizationError(
             'You need to sign up or sign in to save articles',
@@ -49,16 +47,19 @@ const saveArticle = (req, res, next) => {
       const articleInfo = article.toJSON();
       delete articleInfo.owner;
 
-      res.send({ data: articleInfo });
+      res.status(SUCCESS_MSG).send({ data: articleInfo });
     })
-    .catch(() => {
-      next(new InternalServerError('An error has occurred with the server'));
+    .catch((err) => {
+      if (err.status === 404) {
+        next(new NotFoundError('Article not found'));
+      } else {
+        next(new InternalServerError('An error has occurred with the server'));
+      }
     });
 };
 
 const deleteArticle = (req, res, next) => {
-  const articleId = req.params;
-
+  const { articleId } = req.params;
   NewsCard.findById(articleId)
     .orFail(new NotFoundError('Article ID not found'))
     .then((card) => {
