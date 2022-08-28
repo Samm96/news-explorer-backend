@@ -16,9 +16,9 @@ const getSavedArticles = (req, res, next) => {
 
 const saveArticle = (req, res, next) => {
   // come back to this when auth is created
-  console.log(req.user);
+  console.log(req.user._id);
 
-  const owner = req.user;
+  const owner = req.user._id;
 
   const {
     keyword, title, description, publishedAt, source, urlToImage,
