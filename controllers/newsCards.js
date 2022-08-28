@@ -33,8 +33,7 @@ const saveArticle = (req, res, next) => {
     urlToImage,
     owner,
   })
-    .then((article) => res.send({ data: article }))
-    .catch(() => {
+    .then((article) => {
       if (!owner) {
         console.log(owner);
         next(
@@ -42,9 +41,18 @@ const saveArticle = (req, res, next) => {
             'You need to sign up or sign in to save articles',
           ),
         );
-      } else {
-        next(new InternalServerError('An error has occurred with the server'));
       }
+
+      return article;
+    })
+    .then((article) => {
+      const articleInfo = article.toJSON();
+      delete articleInfo.owner;
+
+      res.send({ data: articleInfo });
+    })
+    .catch(() => {
+      next(new InternalServerError('An error has occurred with the server'));
     });
 };
 
