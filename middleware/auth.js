@@ -10,6 +10,15 @@ const { JWT_SECRET } = process.env;
  * ** take the `Bearer` part of the token out
  * ** verify the token with the JWT secret when assigning it to the payload
  * ** else return Authorization error.
+ *
+ * You can apply this in `app.js` for the entire application (place it before all routes)
+ * or you can pass middleware as the second argument inside the request handler:
+ *     i.e. `app.post('/cards', auth, createCard)`
+ * Some routes like signup or signin don't require auth.
+ *
+ * The way we wrote our middleware makes it so that upon successful authorization, an
+object consisting of the payload will be saved to the user property of the request
+object:
  */
 
 module.exports = (req, res, next) => {
