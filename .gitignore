@@ -4,5 +4,4 @@ node_modules
 .env
 crypto.js
 
-error.log
-request.log
+*.log
