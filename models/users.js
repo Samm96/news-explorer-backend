@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'Elise',
       minLength: [2, 'The NAME field length is too short'],
-      maxLength: [30, 'The NAME field length is too long'],
+      maxLength: [15, 'The NAME field length is too long'],
       required: [true, 'Required field'],
     },
 

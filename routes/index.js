@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const auth = require('../middleware/auth');
+const { emailRegex } = require('../utils/regex');
 
 const NotFoundError = require('../errors/NotFoundError');
 
@@ -8,7 +10,13 @@ const usersRouter = require('./users');
 
 const { createUser, userLogin } = require('../controllers/users');
 
-router.post('/signup', createUser);
+router.post('/signup', celebrate({
+  body: Joi.object().keys({
+    username: Joi.string().min(2).max(15).required(),
+    email: Joi.string().email(emailRegex).required(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
 router.post('/signin', userLogin);
 
 router.use(auth);
