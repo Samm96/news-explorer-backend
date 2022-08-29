@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const cors = require('cors');
 const auth = require('../middleware/auth');
 const { emailRegex } = require('../utils/regex');
 
@@ -10,6 +11,8 @@ const usersRouter = require('./users');
 
 const { createUser, userLogin } = require('../controllers/users');
 
+router.use(cors());
+
 router.post('/signup', celebrate({
   body: Joi.object().keys({
     username: Joi.string().min(2).max(10).required(),
@@ -18,6 +21,9 @@ router.post('/signup', celebrate({
   }),
 }), createUser);
 router.post('/signin', userLogin);
+
+router.use(cors());
+router.options('*', cors());
 
 router.use(auth);
 
