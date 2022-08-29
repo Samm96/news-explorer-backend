@@ -1,4 +1,7 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+const { linkRegex } = require('../utils/regex');
+const validateURL = require('../utils/urlValidate');
 
 const {
   getSavedArticles,
@@ -8,8 +11,31 @@ const {
 
 router.get('/', getSavedArticles);
 
-router.post('/', saveArticle);
+router.post(
+  '/',
+  celebrate({
+    body: Joi.object().keys({
+      ObjectId: Joi.string().hex().length(24),
+      keyword: Joi.string().required(),
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      publishedAt: Joi.string().required(),
+      source: Joi.object().required(),
+      urlToImage: Joi.string().regex(linkRegex).custom(validateURL),
+      owner: Joi.string().hex().length(24),
+    }),
+  }),
+  saveArticle,
+);
 
-router.delete('/:articleId', deleteArticle);
+router.delete(
+  '/:articleId',
+  celebrate({
+    body: Joi.object().keys({
+      ObjectId: Joi.string().hex().length(24),
+    }),
+  }),
+  deleteArticle,
+);
 
 module.exports = router;
