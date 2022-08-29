@@ -6,11 +6,13 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const routes = require('./routes');
 const { errorLogger, requestLogger } = require('./middleware/loggers');
+const limiter = require('./middleware/limiter');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
+app.use(limiter);
 app.use(helmet());
 
 mongoose.connect('mongodb://localhost:27017/news-explorer');
