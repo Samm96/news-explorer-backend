@@ -11,7 +11,7 @@ const ConflictError = require('../errors/ConflictError');
 const { SUCCESS_MSG } = require('../utils/utils');
 
 const getUser = (req, res, next) => {
-  const id = req.params.id !== 'me' ? req.params.id : req.user._id;
+  const id = req.user._id;
 
   User.findById(id)
     .then((user) => {
