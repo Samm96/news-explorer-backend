@@ -72,14 +72,13 @@ const deleteArticle = (req, res, next) => {
       }
 
       if (article.owner.toString() !== currentUserId) {
-        next(new ForbiddenError("Cannot delete another user's card"));
+        next(new ForbiddenError('Cannot delete another user\'s card'));
       }
     })
     .then(() => {
       NewsCard.findOneAndDelete(articleId)
         .orFail(new NotFoundError('Article ID not found'))
         .then(() => res
-          .status(SUCCESS_MSG)
           .send({ message: 'Article deleted successfully' }))
         .catch(next);
     })
