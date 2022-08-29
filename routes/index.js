@@ -3,6 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const cors = require('cors');
 const auth = require('../middleware/auth');
 const { emailRegex } = require('../utils/regex');
+const { requestLogger } = require('../middleware/loggers');
 
 const NotFoundError = require('../errors/NotFoundError');
 
@@ -20,7 +21,7 @@ router.post('/signup', celebrate({
     password: Joi.string().required(),
   }),
 }), createUser);
-router.post('/signin', userLogin);
+router.post('/signin', requestLogger, userLogin);
 
 router.use(cors());
 router.options('*', cors());

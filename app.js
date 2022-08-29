@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const routes = require('./routes');
+const { errorLogger, requestLogger } = require('./middleware/loggers');
 
 const { PORT = 3000 } = process.env;
 
@@ -29,7 +30,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(requestLogger);
+
 app.use(routes);
+app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
