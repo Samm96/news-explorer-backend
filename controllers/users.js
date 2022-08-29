@@ -65,7 +65,7 @@ const userLogin = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Incorrect email or password'));
+        return Promise.reject(new Error('Incorrect email/password or user doesn\'t exist'));
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
