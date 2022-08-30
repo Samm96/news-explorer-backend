@@ -9,6 +9,7 @@ const CastError = require('../errors/CastError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const { SUCCESS_MSG } = require('../utils/utils');
+const AuthorizationError = require('../errors/AuthorizationError');
 
 const getUser = (req, res, next) => {
   const id = req.user._id;
@@ -65,11 +66,11 @@ const userLogin = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Incorrect email/password or user doesn\'t exist'));
+        next(new AuthorizationError('Incorrect email/password or user doesn\'t exist'));
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return Promise.reject(new Error('Incorrect email or password'));
+          next(new BadRequestError('Incorrect email or password'));
         }
         return user;
       });

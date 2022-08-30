@@ -4,6 +4,7 @@ const InternalServerError = require('../errors/InternalError');
 const AuthorizationError = require('../errors/AuthorizationError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const CastError = require('../errors/CastError');
 
 const getSavedArticles = (req, res, next) => {
   const currentUserId = req.user._id;
@@ -106,10 +107,16 @@ const deleteArticle = (req, res, next) => {
     .then(() => {
       NewsCard.findOneAndDelete(articleId)
         .orFail(new NotFoundError('Article ID not found'))
-        .then(() => res.send({ message: 'Article deleted successfully' }))
+        .then(() => {
+          res.send({ message: 'Article deleted successfully' });
+        })
         .catch(next);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new CastError('Article ID not valid'));
+      }
+    });
 };
 
 module.exports = {
