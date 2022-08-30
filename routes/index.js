@@ -16,7 +16,7 @@ router.use(cors());
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
-    username: Joi.string().min(2).max(10).required(),
+    name: Joi.string().min(2).max(10).required(),
     email: Joi.string().email(emailRegex).required(),
     password: Joi.string().required(),
   }),

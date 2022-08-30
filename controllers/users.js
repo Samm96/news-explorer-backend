@@ -37,7 +37,7 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   User.findOne({ email })
     .then((user) => {
@@ -47,7 +47,7 @@ const createUser = (req, res, next) => {
         return bcrypt.hash(password, 10);
       }
     })
-    .then((hash) => User.create({ username, email, password: hash }))
+    .then((hash) => User.create({ name, email, password: hash }))
     .then((user) => res.status(SUCCESS_MSG).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
