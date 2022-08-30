@@ -23,6 +23,7 @@ router.post(
       text: Joi.string().required(),
       date: Joi.string().required(),
       source: Joi.string().required(),
+      link: Joi.string().regex(linkRegex).custom(validateURL),
       image: Joi.string().regex(linkRegex).custom(validateURL),
       owner: Joi.string().hex().length(24),
     }),
