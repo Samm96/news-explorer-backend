@@ -48,16 +48,17 @@ const saveArticle = (req, res, next) => {
   const owner = req.user._id;
 
   const {
-    keyword, title, description, publishedAt, source, urlToImage,
+    keyword, title, text, date, link, source, image,
   } = req.body;
 
   NewsCard.create({
     keyword,
     title,
-    description,
-    publishedAt,
+    text,
+    date,
+    link,
     source,
-    urlToImage,
+    image,
     owner,
   })
     .then((article) => {
