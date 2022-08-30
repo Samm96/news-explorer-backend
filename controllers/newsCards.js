@@ -23,11 +23,17 @@ const getSavedArticles = (req, res, next) => {
     .then((articles) => {
       const articlesUpdated = [];
 
-      articles.forEach((article) => {
-        const articleInfo = article.toJSON();
-        delete articleInfo.owner;
-        articlesUpdated.push(articleInfo);
-      });
+      if (articles.length > 1) {
+        articles.forEach((article) => {
+          const articleInfo = article.toJSON();
+          delete articleInfo.owner;
+          articlesUpdated.push(articleInfo);
+        });
+      } else if (articles.length === 1) {
+        const article = articles[0];
+        delete article.owner;
+        articlesUpdated.push(article);
+      }
 
       res.send(articlesUpdated);
     })
