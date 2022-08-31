@@ -27,15 +27,15 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://newsapi.org/v2');
   res.header(
     'Access-Control-Allow-Origin',
-    'https://api.sam-news-explorer.students.nomoredomainssbs.ru',
+    'http://api.sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header(
     'Access-Control-Allow-Origin',
-    'https://www.sam-news-explorer.students.nomoredomainssbs.ru',
+    'http://www.sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header(
     'Access-Control-Allow-Origin',
-    'https://sam-news-explorer.students.nomoredomainssbs.ru',
+    'http://sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header('Access-Control-Request-Methods', 'GET,HEAD,PATCH,POST,DELETE');
   res.header(
