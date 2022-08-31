@@ -5,25 +5,39 @@ const newsCardSchema = new mongoose.Schema(
   {
     keyword: {
       type: String,
+      required: true,
     },
 
     title: {
       type: String,
+      required: true,
     },
 
-    description: {
+    text: {
       type: String,
+      required: true,
     },
 
-    publishedAt: {
+    date: {
       type: String,
+      required: true,
     },
 
     source: {
-      type: Object,
+      type: String,
+      required: true,
     },
 
-    urlToImage: {
+    link: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (v) => linkRegex.test(v),
+        message: 'This is not a valid URL',
+      },
+    },
+
+    image: {
       type: String,
       required: true,
       validate: {

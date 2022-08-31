@@ -3,6 +3,8 @@ const AuthorizationError = require('../errors/AuthorizationError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+const { secretDevKey } = require('../utils/configuration');
+
 /** For this middleware, need to check if the request includes the user's token,
  * if it doesn't, add authorization error.
  *
@@ -32,7 +34,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret-key');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : secretDevKey);
   } catch (err) {
     return next(new AuthorizationError('Authorization Required'));
   }

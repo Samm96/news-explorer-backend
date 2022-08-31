@@ -7,15 +7,16 @@ const { errors } = require('celebrate');
 const routes = require('./routes');
 const { errorLogger, requestLogger } = require('./middleware/loggers');
 const limiter = require('./middleware/limiter');
+const { local } = require('./utils/configuration');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGO_DB } = process.env;
 
 const app = express();
 
 app.use(limiter);
 app.use(helmet());
 
-mongoose.connect('mongodb://localhost:27017/news-explorer');
+mongoose.connect(process.env.NODE_ENV === 'production' ? MONGO_DB : local);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

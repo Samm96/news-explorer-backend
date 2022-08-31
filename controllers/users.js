@@ -1,14 +1,16 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
+const { secretDevKey } = require('../utils/configuration');
 
 const User = require('../models/users');
 const NotFoundError = require('../errors/NotFoundError');
 const CastError = require('../errors/CastError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
-const { SUCCESS_MSG } = require('../utils/utils');
+const { SUCCESS_MSG } = require('../utils/constants');
+const AuthorizationError = require('../errors/AuthorizationError');
 
 const getUser = (req, res, next) => {
   const id = req.user._id;
@@ -37,7 +39,7 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   User.findOne({ email })
     .then((user) => {
@@ -47,8 +49,12 @@ const createUser = (req, res, next) => {
         return bcrypt.hash(password, 10);
       }
     })
-    .then((hash) => User.create({ username, email, password: hash }))
-    .then((user) => res.status(SUCCESS_MSG).send({ data: user }))
+    .then((hash) => User.create({ name, email, password: hash }))
+    .then((user) => {
+      const userInfo = user.toJSON();
+      delete userInfo.password;
+      res.status(SUCCESS_MSG).send({ data: userInfo });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Missing or invalid email or password'));
@@ -65,19 +71,27 @@ const userLogin = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Incorrect email/password or user doesn\'t exist'));
+        next(
+          new AuthorizationError(
+            "Incorrect email/password or user doesn't exist",
+          ),
+        );
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return Promise.reject(new Error('Incorrect email or password'));
+          next(new BadRequestError('Incorrect email or password'));
         }
         return user;
       });
     })
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: '7d',
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : secretDevKey,
+        {
+          expiresIn: '7d',
+        },
+      );
 
       const userInfo = user.toJSON();
       delete userInfo[password];
