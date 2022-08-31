@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 const routes = require('./routes');
 const { errorLogger, requestLogger } = require('./middleware/loggers');
 const limiter = require('./middleware/limiter');
-const { local } = require('./utils/constants');
+const { local } = require('./utils/configuration');
 
 const { PORT = 3000, MONGO_DB } = process.env;
 
