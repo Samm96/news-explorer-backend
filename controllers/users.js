@@ -49,7 +49,11 @@ const createUser = (req, res, next) => {
       }
     })
     .then((hash) => User.create({ name, email, password: hash }))
-    .then((user) => res.status(SUCCESS_MSG).send({ data: user }))
+    .then((user) => {
+      const userInfo = user.toJSON();
+      delete userInfo.password;
+      res.status(SUCCESS_MSG).send({ data: userInfo });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Missing or invalid email or password'));
