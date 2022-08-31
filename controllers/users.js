@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
+const { secretDevKey } = require('../utils/constants');
 
 const User = require('../models/users');
 const NotFoundError = require('../errors/NotFoundError');
@@ -70,7 +71,11 @@ const userLogin = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        next(new AuthorizationError('Incorrect email/password or user doesn\'t exist'));
+        next(
+          new AuthorizationError(
+            "Incorrect email/password or user doesn't exist",
+          ),
+        );
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
@@ -80,9 +85,13 @@ const userLogin = (req, res, next) => {
       });
     })
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: '7d',
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : secretDevKey,
+        {
+          expiresIn: '7d',
+        },
+      );
 
       const userInfo = user.toJSON();
       delete userInfo[password];
