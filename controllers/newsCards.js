@@ -116,7 +116,7 @@ const deleteArticle = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new CastError('Article ID not valid'));
       } else {
-        next(new InternalServerError('An error has occurred with the server'));
+        next(new NotFoundError('Article ID not found'));
       }
     });
 };
