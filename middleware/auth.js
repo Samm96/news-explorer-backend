@@ -3,7 +3,7 @@ const AuthorizationError = require('../errors/AuthorizationError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const { secretDevKey } = require('../utils/constants');
+const { secretDevKey } = require('../utils/configuration');
 
 /** For this middleware, need to check if the request includes the user's token,
  * if it doesn't, add authorization error.

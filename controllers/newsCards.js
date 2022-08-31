@@ -1,5 +1,5 @@
 const NewsCard = require('../models/newsCards');
-const { SUCCESS_MSG } = require('../utils/utils');
+const { SUCCESS_MSG } = require('../utils/constants');
 const InternalServerError = require('../errors/InternalError');
 const AuthorizationError = require('../errors/AuthorizationError');
 const NotFoundError = require('../errors/NotFoundError');
