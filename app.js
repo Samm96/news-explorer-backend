@@ -23,19 +23,19 @@ app.use(express.urlencoded({ extended: true }));
 
 // do i need the `Access-Control-Allow-Origin` for the NewsApi?
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', 'https://localhost:3000');
   res.header('Access-Control-Allow-Origin', 'https://newsapi.org/v2');
   res.header(
     'Access-Control-Allow-Origin',
-    'http://api.sam-news-explorer.students.nomoredomainssbs.ru',
+    'https://api.sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header(
     'Access-Control-Allow-Origin',
-    'http://www.sam-news-explorer.students.nomoredomainssbs.ru',
+    'https://www.sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header(
     'Access-Control-Allow-Origin',
-    'http://sam-news-explorer.students.nomoredomainssbs.ru',
+    'https://sam-news-explorer.students.nomoredomainssbs.ru',
   );
   res.header('Access-Control-Request-Methods', 'GET,HEAD,PATCH,POST,DELETE');
   res.header(
