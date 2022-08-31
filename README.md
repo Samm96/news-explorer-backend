@@ -8,7 +8,8 @@ Uses `auth` middleware as well as `celebrate` and `Joi` to check validity and wh
 
 ### The backend code is running at the following domain:
 https://sam-news-explorer.students.nomoredomainssbs.ru 
-
-or
-
+_or_
 https://www.sam-news-explorer.students.nomoredomainssbs.ru
+
+
+api: https://api.sam-news-explorer.students.nomoredomainssbs.ru
