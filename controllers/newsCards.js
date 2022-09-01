@@ -98,10 +98,16 @@ const deleteArticle = (req, res, next) => {
     .then((article) => {
       if (!articleId) {
         next(NotFoundError('Article ID not found'));
-      } else if (article.owner.toString() !== currentUserId) {
+      }
+
+      if (article.owner.toString() !== currentUserId) {
         next(new ForbiddenError("Cannot delete another user's card"));
       }
-      NewsCard.findByIdAndRemove(articleId)
+
+      return article;
+    })
+    .then((article) => {
+      NewsCard.findOneAndDelete(articleId)
         .orFail(new NotFoundError('Article ID not found'))
         .then(() => res.status(SUCCESS_MSG).send(article && { message: 'Article deleted successfully' }))
         .catch(next);
