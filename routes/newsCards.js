@@ -36,14 +36,6 @@ router.delete(
   celebrate({
     body: Joi.object().keys({
       ObjectId: Joi.string().hex().length(24),
-      keyword: Joi.string().required(),
-      title: Joi.string().required(),
-      text: Joi.string().required(),
-      date: Joi.string().required(),
-      source: Joi.string().required(),
-      link: Joi.string().required(),
-      image: Joi.string().required(),
-      owner: Joi.string().hex().length(24),
     }),
   }),
   deleteArticle,
