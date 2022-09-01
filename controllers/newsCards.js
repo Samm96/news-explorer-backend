@@ -109,7 +109,7 @@ const deleteArticle = (req, res, next) => {
     .then(() => {
       NewsCard.findOneAndDelete(articleId)
         .orFail(new NotFoundError('Article ID not found'))
-        .then(() => res.status(SUCCESS_MSG).send({ message: 'Article deleted successfully', articleId }))
+        .then(() => res.status(SUCCESS_MSG).send({ data: articleId, message: 'Article deleted successfully' }))
         .catch(next);
     })
     .catch((err) => {
