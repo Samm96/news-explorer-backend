@@ -10,7 +10,6 @@ const CastError = require('../errors/CastError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const { SUCCESS_MSG } = require('../utils/constants');
-const AuthorizationError = require('../errors/AuthorizationError');
 
 const getUser = (req, res, next) => {
   const id = req.user._id;
@@ -67,23 +66,7 @@ const createUser = (req, res, next) => {
 const userLogin = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
-    .select('+password')
-    .then((user) => {
-      if (!user) {
-        next(
-          new AuthorizationError(
-            "Incorrect email/password or user doesn't exist",
-          ),
-        );
-      }
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          next(new BadRequestError('Incorrect email or password'));
-        }
-        return user;
-      });
-    })
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
@@ -93,10 +76,7 @@ const userLogin = (req, res, next) => {
         },
       );
 
-      const userInfo = user.toJSON();
-      delete userInfo[password];
-
-      res.send({ data: userInfo, token });
+      res.send({ data: user.toJSON(), token });
     })
     .catch(() => {
       next(new BadRequestError('Incorrect email or password'));
