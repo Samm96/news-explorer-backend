@@ -13,3 +13,7 @@ https://www.sam-news-explorer.students.nomoredomainssbs.ru
 
 
 api: https://api.sam-news-explorer.students.nomoredomainssbs.ru
+
+### More Links!
+<a href="https://sam-news-explorer.students.nomoredomainssbs.ru/">Deployed App</a> <br/>
+<a href="https://github.com/Samm96/news-explorer-frontend">Frontend code of NewsExplorer</a>
